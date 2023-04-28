@@ -1,0 +1,48 @@
+#include<stdio.h>
+#include<string.h>
+void generateCode(char[], char[], char[], char);
+int main() 
+{
+    char expression[100];
+    printf("Enter the expression: ");
+    scanf("%s", expression);
+    char t[2] = "t";
+    char code[100][100];
+    int codeIndex = 0;
+    int i, j, k;
+    for(i = 0; i < strlen(expression); i++) 
+	{
+        if(expression[i] == '+' || expression[i] == '-' || expression[i] == '*' || expression[i] == '/') 
+		{
+            char op = expression[i];
+            char arg1[50], arg2[50];
+            int arg1Index = 0, arg2Index = 0;
+            for(j = i-1; j >= 0 && expression[j] != '+' && expression[j] != '-' && expression[j] != '*' && expression[j] != '/'; j--) 
+			{
+                arg1[arg1Index++] = expression[j];
+            }
+            arg1[arg1Index] = '\0';
+            for(k = i+1; k < strlen(expression) && expression[k] != '+' && expression[k] != '-' && expression[k] != '*' && expression[k] != '/'; k++) 
+			{
+                arg2[arg2Index++] = expression[k];
+            }
+            arg2[arg2Index] = '\0';
+            strrev(arg1);
+            strrev(arg2);
+            char temp[50];
+            sprintf(temp, "%s%d", t, codeIndex++);
+            generateCode(temp, arg1, arg2, op);
+            strcpy(code[codeIndex-1], temp);
+            i += strlen(arg2);
+        }
+    }
+    printf("\nThree Address Code Statements:\n");
+    for(i = 0; i < codeIndex; i++) {
+        printf("%s\n", code[i]);
+    }
+    return 0;
+}
+void generateCode(char result[], char arg1[], char arg2[], char op) 
+{
+    printf("%s = %s %c %s\n", result, arg1, op, arg2);
+}
