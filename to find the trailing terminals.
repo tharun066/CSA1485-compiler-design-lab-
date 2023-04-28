@@ -1,0 +1,63 @@
+#include<stdio.h>
+#include<string.h>
+#include<ctype.h>
+#define MAX 10
+char grammar[MAX][MAX];
+char TT[MAX];
+int n;
+void get_trailing_terminals(char NT);
+int main()
+{
+    int i;
+    char NT;
+    printf("Enter the number of productions: ");
+    scanf("%d",&n);
+    printf("Enter the productions: \n");
+    for(i=0;i<n;i++)
+    {
+        scanf("%s",grammar[i]);
+    }
+    printf("Enter the non-terminal for which you want to find the trailing terminals: ");
+    scanf(" %c",&NT);
+    get_trailing_terminals(NT);
+    printf("Trailing terminals of %c: %s\n",NT,TT);
+    return 0;
+}
+void get_trailing_terminals(char NT)
+{
+    int i,j,k;
+    char temp[MAX],t[MAX];
+    TT[0] = '\0';
+    strcat(TT,"$");
+    for(i=0;i<n;i++)
+    {
+        if(grammar[i][0] == NT)
+        {
+            j = strlen(grammar[i]) - 1;
+            while(j>=2)
+            {
+                k = 0;
+                temp[0] = '\0';
+
+                if(isupper(grammar[i][j]))
+                {
+                    get_trailing_terminals(grammar[i][j]);
+                    strcpy(temp,TT);
+                }
+                else
+                {
+                    temp[k] = grammar[i][j];
+                    temp[k+1] = '\0';
+                }
+                strcat(temp,t);
+                strcpy(t,temp);
+                if(strchr(TT,temp[0]) == NULL)
+                {
+                    strcat(TT,temp);
+                }
+
+                j--;
+            }
+        }
+    }
+}
