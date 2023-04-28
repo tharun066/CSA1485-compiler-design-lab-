@@ -1,0 +1,86 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX_RULES 50
+#define MAX_TERM 50
+int num_rules, num_terms;
+char rules[MAX_RULES][MAX_TERM];
+
+void find_leading(int rule_index, char leading[MAX_TERM]) 
+{
+    int i, j, k;
+    char term;
+    leading[0] = '\0';
+    term = rules[rule_index][3];
+    if (term >= 'a' && term <= 'z') 
+	{
+        leading[0] = term;
+        leading[1] = '\0';
+    }
+    else {
+        for (i = 3; i < strlen(rules[rule_index]); i++) 
+		{
+            if (rules[rule_index][i] == '|') 
+			{
+                continue;
+            }
+            if (rules[rule_index][i] >= 'a' && rules[rule_index][i] <= 'z') 
+			{
+                leading[0] = rules[rule_index][i];
+                leading[1] = '\0';
+                break;
+            }
+            if (rules[rule_index][i] >= 'A' && rules[rule_index][i] <= 'Z') 
+			{
+                for (j = 0; j < num_rules; j++) {
+                    if (rules[j][0] == rules[rule_index][i]) 
+					{
+                        find_leading(j, leading);
+                        for (k = 0; k < strlen(leading); k++) 
+						{
+                            if (leading[k] == 'e') {
+                                continue;
+                            }
+                            if (strchr(leading, rules[rule_index][i+1]) == NULL) 
+							{
+                                strcat(leading, &rules[rule_index][i+1]);
+                            }
+                        }
+                        break;
+                    }
+                }
+            }
+            if (leading[0] != '\0') 
+			{
+                break;
+            }
+        }
+    }
+}
+int main() 
+{
+    int i, j;
+    char leading[MAX_TERM];
+
+    printf("Enter the number of rules: ");
+    scanf("%d", &num_rules);
+
+    printf("Enter the rules:\n");
+    for (i = 0; i < num_rules; i++) 
+	{
+        scanf("%s", rules[i]);
+    }
+
+    printf("The leading terminals are:\n");
+    for (i = 0; i < num_rules; i++) 
+	{
+        find_leading(i, leading);
+        for (j = 0; j < strlen(leading); j++) 
+		{
+            if (leading[j] != '|' && strchr(leading, leading[j+1]) == NULL) 
+			{
+                printf("%c ", leading[j]);
+            }
+        }
+    }
+    return 0;
+}
