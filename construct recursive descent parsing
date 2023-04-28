@@ -1,0 +1,61 @@
+#include <stdio.h>
+static char c[10];
+int j = 0;
+
+void Eprime();
+void E();
+void X();
+void Y();
+
+int main() {
+    printf("Enter a string\n");
+    scanf("%s", c);
+    E();
+    if (c[j] == '$')
+        printf("Valid string\n");
+    else
+        printf("Invalid string\n");
+    return 0;
+}
+
+void E() 
+{
+    Y();
+    Eprime();
+    return;
+}
+
+void Eprime()
+{
+    X();
+    Y();
+    return;
+}
+
+void X() {
+    if (c[j] == '+') 
+    {
+        j++;
+        Y();
+        X();
+    } else if (c[j] == '*') {
+        j++;
+        Y();
+        X();
+    }
+    return;
+}
+
+void Y() {
+    if (c[j] == '(') 
+    {
+        j++;
+        E();
+        if (c[j] == ')')
+            j++;
+    } else if (c[j] == 'i') 
+    {
+        j++;
+    }
+    return;
+}
